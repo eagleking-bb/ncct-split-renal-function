@@ -108,8 +108,9 @@ after the archival DOI is minted.
 
 ## Licence
 
-Released under the MIT License (see `LICENSE`). The licence covers the
-source code only. Patient images, clinical records, model checkpoints and
+Released under the MIT License (see `LICENSE`). Copyright 2026 Guangdong
+Provincial People's Hospital (Guangdong Academy of Medical Sciences), Southern
+Medical University. The licence covers the source code only. Patient images, clinical records, model checkpoints and
 derived feature tables are not distributed and remain subject to the
 data-use agreement described above.
 
