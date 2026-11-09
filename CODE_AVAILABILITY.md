@@ -5,7 +5,7 @@
 **Code availability.** The analysis code that reproduces cohort definition,
 kidney segmentation, radiomics extraction, model training, ensembling and
 statistical evaluation is publicly available at
-`https://github.com/<ACCOUNT>/<REPOSITORY>` and archived at Zenodo
+`https://github.com/eagleking-bb/ncct-split-renal-function` and archived at Zenodo
 (DOI: `<DOI>`).
 
 **Data availability.** The datasets generated and/or analysed during the
