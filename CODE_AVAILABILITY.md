@@ -6,7 +6,7 @@
 kidney segmentation, radiomics extraction, model training, ensembling and
 statistical evaluation is publicly available at
 `https://github.com/eagleking-bb/ncct-split-renal-function` and archived at Zenodo
-(DOI: `<DOI>`).
+(DOI: 10.5281/zenodo.24080203).
 
 **Data availability.** The datasets generated and/or analysed during the
 current study are not publicly available because they contain clinical images

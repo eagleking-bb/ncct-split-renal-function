@@ -4,7 +4,7 @@ This repository contains the analysis code for the study *Deep learning and
 radiomics from non-contrast CT to predict split renal function and identify
 severe unilateral renal dysfunction* (submitted to eClinicalMedicine).
 
-Release `1.2.0` (GFR target-unit fix; locked prediction tables and reported results are unchanged). This is the minimal distribution prepared for eClinicalMedicine: analysis, plotting and statistics code only. Source: https://github.com/eagleking-bb/ncct-split-renal-function. Archived at Zenodo: DOI `<TO BE INSERTED ON ACCEPTANCE>`.
+Release `1.2.0` (GFR target-unit fix; locked prediction tables and reported results are unchanged). This is the minimal distribution prepared for eClinicalMedicine: analysis, plotting and statistics code only. Source: https://github.com/eagleking-bb/ncct-split-renal-function. Archived at Zenodo: doi:10.5281/zenodo.24080203.
 
 ## Reproducibility status (read first)
 
