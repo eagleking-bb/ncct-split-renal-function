@@ -40,7 +40,7 @@ def main() -> None:
             block=block.dropna(subset=["true_srf_lt15","predicted_probability_srf_lt15"]).reset_index(drop=True); y=block.true_srf_lt15.astype(int).to_numpy(); p=block.predicted_probability_srf_lt15.to_numpy(float); ids=block.anonymized_patient_id.to_numpy(); estimate=fast_metrics(y,p,ids,threshold)
             unique=pd.unique(ids); groups=[np.flatnonzero(ids==patient) for patient in unique]; rng=np.random.default_rng(int(config["random_seed"]) + 70000 + side_index*1000 + (0 if split == "internal" else 10000)); rep_rows=[]
             for replicate in range(int(config["bootstrap_replicates"])):
-                idx=np.concatenate([groups[i] for i in rng.integers(0,len(groups),len(groups))]); result=fast_metrics(y[idx],p[idx],np.repeat(np.arange(len(groups)),[len(groups[i]) for i in rng.integers(0,len(groups),len(groups))]) if False else ids[idx],threshold); rep_rows.append({"replicate":replicate,**{m:result[m] for m in CLASSIFICATION_METRICS}})
+                idx=np.concatenate([groups[i] for i in rng.integers(0,len(groups),len(groups))]); result=fast_metrics(y[idx],p[idx],ids[idx],threshold); rep_rows.append({"replicate":replicate,**{m:result[m] for m in CLASSIFICATION_METRICS}})
             reps=pd.DataFrame(rep_rows); intervals={m:(reps[m].quantile(.025),reps[m].quantile(.975)) for m in CLASSIFICATION_METRICS}
             record = {"cohort": split, "model": "Dual-Fusion Multimodal Ensemble (DFME)", "side": side, **estimate}
             for metric in CLASSIFICATION_METRICS:

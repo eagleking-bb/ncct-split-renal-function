@@ -435,7 +435,7 @@ def calculate_ccc(y_true, y_pred):
 def safe_auc(y_true, y_pred):
     try:
         return 0.5 if len(np.unique(y_true)) < 2 else roc_auc_score(y_true, y_pred)
-    except: return 0.5
+    except Exception: return 0.5
 
 def warmup_lr_scheduler(optimizer, epoch, warmup_epochs, init_lr, min_lr):
     lr = init_lr * (epoch + 1) / warmup_epochs if epoch < warmup_epochs else min_lr + (init_lr - min_lr) * 0.5 * (1 + np.cos((epoch - warmup_epochs) / (EPOCHS - warmup_epochs) * np.pi))

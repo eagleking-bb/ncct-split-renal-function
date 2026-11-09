@@ -20,6 +20,12 @@ months to 5 years after publication.
 
 ## What is in this repository
 
+The code alone does not re-derive a published number: the locked prediction
+tables it reads are withheld (see below) and are released only under the
+data-use agreement. With those tables, every reported value is regenerated at
+the precision printed in the manuscript.
+
+
 | Included | Not included |
 | --- | --- |
 | Cohort definition and case-level inventory | DICOM or NIfTI images |

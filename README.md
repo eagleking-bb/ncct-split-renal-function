@@ -24,11 +24,49 @@ training entrypoints. Every training entrypoint writes
 new checkpoint carries an `inference_state` block with the preprocessing
 statistics, split fingerprint and image pipeline that produced it.
 
-The code regenerates every number in Table 2, Table 3 and Figures 3-6 from the
-locked model outputs. It does not redistribute patient images, reference
-nuclear-medicine measurements, derived radiomics matrices, model checkpoints or
-locked prediction tables; those are available under the data-access procedure
-described in `CODE_AVAILABILITY.md`.
+### Provenance of the reported results
+
+Every number in the manuscript comes from the locked analysis runs whose
+checkpoints and prediction tables were frozen before this repository was
+prepared. This release corrects the imputation order, the augmentation
+caching and the GFR target unit. Those corrections change how a model is
+fitted; they do not change the frozen predictions or any reported value.
+Consequently, a model trained with this repository is a **new run** and must
+never be pooled with the locked predictions. The Methods section should
+describe the locked runs, and the differences listed in the table above should
+be reported as implementation corrections rather than as an alternative
+analysis.
+
+### What this repository can and cannot recompute
+
+Given the locked prediction tables, the stage-05 scripts regenerate every value
+in Tables 2 and 3 and the source data behind Figures 4-6 at the reported
+precision. Without those tables the pipeline still runs, but it cannot re-derive
+a published number on its own: patient images, reference nuclear-medicine
+measurements, derived radiomics matrices, model checkpoints and the locked
+prediction tables are withheld because they carry individual-level clinical or
+imaging information, and are released only under the data-use agreement in
+`CODE_AVAILABILITY.md`. Re-segmenting, re-training or re-running external
+inference therefore requires the full data-access procedure.
+
+### Random-number use
+
+`random_seed: 2026` is the base seed for every stage.
+
+- Marginal confidence intervals in `05_evaluation` resample **patients** (both
+  kidneys move together) with 5,000 replicates. Each model/side analysis draws
+  from its own deterministic offset (`seed + 1000 x model + 100 x side`) so that
+  one analysis cannot be perturbed by another.
+- Paired comparisons in `06_statistics` use 10,000 replicates and one shared set
+  of patient indices per replicate, so the difference between two models is
+  computed on the same resample.
+- `04_ensembling/04_external_validation_center3.py` deliberately keeps the
+  legacy `numpy.random.RandomState(2026)` stream, because that is the stream
+  used for the locked Table 2B intervals; every model is evaluated on the same
+  patient indices within a replicate.
+
+Changing the base seed moves percentile bounds by a few thousandths of a unit;
+point estimates are unaffected.
 
 ## Study boundary
 
