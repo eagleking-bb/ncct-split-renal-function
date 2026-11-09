@@ -1,0 +1,64 @@
+# Example configuration for the locked analysis pipeline (05_evaluation, 06_statistics).
+# Copy to config/config.yaml and replace every <PLACEHOLDER> with a local path.
+# No path in this file should be committed with real institutional locations.
+
+project_root: <PROJECT_ROOT>
+output_dir: <OUTPUT_ROOT>/final_locked_analysis
+random_seed: 2026
+# Two-sided 95% percentile bootstrap intervals in the manuscript use 5,000
+# patient-level replicates; paired comparisons between models use 10,000.
+bootstrap_replicates: 5000
+classification_threshold: 0.5
+srf_threshold: 0.15
+
+inputs:
+  clinical_csv: <DATA_ROOT>/clinical/Auto_Merged_Clinical.csv
+  radiomics_csv: <DATA_ROOT>/radiomics/Official_All_Patients_Raw_Radiomics.csv
+  nifti_audit_csv: <DATA_ROOT>/audit/patient_level_audit.csv
+  nifti_qc_csv: <DATA_ROOT>/audit/mask_image_qc.csv
+  disease_center1_csv: <DATA_ROOT>/clinical/NFH_disease.csv
+  disease_center2_csv: <DATA_ROOT>/clinical/GZH_disease.csv
+  disease_center3_csv: <DATA_ROOT>/clinical/GDPH_disease.csv
+  internal_figure_audit: <DATA_ROOT>/audit/internal_figure_data_check_report.md
+  external_manifest: <PREDICTIONS_ROOT>/external_center3/run_manifest.json
+  model_code_early_concat: <PROJECT_ROOT>/03_training/05_train_architecture_baseline_early_concat_full.py
+  model_code_cross_attention: <PROJECT_ROOT>/03_training/01_train_proposed_cross_attention_full.py
+
+models:
+  clinical_only:
+    label: Clinical-only
+    internal: <PREDICTIONS_ROOT>/internal/clinical_ridge_logistic_predictions.csv
+    external: <PREDICTIONS_ROOT>/external_center3/clinical_ridge_logistic/external_predictions.csv
+  radiomics_only:
+    label: Radiomics-only
+    internal: <PREDICTIONS_ROOT>/internal/radiomics_random_forest_predictions.csv
+    external: <PREDICTIONS_ROOT>/external_center3/radiomics_random_forest/external_predictions.csv
+  image_only:
+    label: NCCT-only
+    internal: <PREDICTIONS_ROOT>/internal/ensemble_vision_only_predictions.csv
+    external: <PREDICTIONS_ROOT>/external_center3/vision_only/external_predictions.csv
+  early_concat:
+    label: Early concatenation
+    internal: <PREDICTIONS_ROOT>/internal/ensemble_concat_full_predictions.csv
+    external: <PREDICTIONS_ROOT>/external_center3/concat_full/external_predictions.csv
+  cross_attention:
+    label: Dual-branch cross-attention
+    internal: <PREDICTIONS_ROOT>/internal/ensemble_dual_attention_full_predictions.csv
+    external: <PREDICTIONS_ROOT>/external_center3/dual_attention_full/external_predictions.csv
+  dfme:
+    label: Dual-Fusion Multimodal Ensemble (DFME)
+    internal: <PREDICTIONS_ROOT>/internal/ensemble_equal_weight_predictions.csv
+    external: <PREDICTIONS_ROOT>/external_center3/fixed_equal_weight_concat_dual/external_predictions.csv
+
+dca_thresholds:
+  start: 0.05
+  stop: 0.50
+  step: 0.01
+
+gfr_bins:
+  - [-1000000, 10, "<10"]
+  - [10, 20, "10-<20"]
+  - [20, 30, "20-<30"]
+  - [30, 40, "30-<40"]
+  - [40, 50, "40-<50"]
+  - [50, 1000000, ">=50"]

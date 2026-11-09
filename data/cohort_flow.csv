@@ -1,0 +1,8 @@
+stage,n_patients,note
+clinical_source_records,1067,Patients meeting the initial clinical inclusion criteria
+excluded_before_locking,25,Eligibility exclusions shown in Figure 1
+locked_analysis_population,1042,Training 698 + internal development 175 + external test 169
+centre_1_and_2_development,873,Patient-level split into training and internal development
+training,698,Model fitting only
+internal_development,175,Checkpoint selection and internal evaluation
+centre_3_locked_external_test,169,"Locked external validation cohort: 338 kidneys, 28 with reference SRF <15%"

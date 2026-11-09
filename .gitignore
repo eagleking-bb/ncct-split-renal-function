@@ -1,0 +1,30 @@
+# Byte-compiled / cached files
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Analysis outputs and local configuration
+outputs/
+results/
+config/config.yaml
+run_manifest.json
+
+# Data and model artefacts (never commit patient data or checkpoints)
+data/*
+!data/cohort_flow.csv
+*.nii
+*.nii.gz
+*.pth
+*.joblib
+*.xlsx
+*.dcm
+
+# Editor / OS files
+.DS_Store
+.idea/
+.vscode/

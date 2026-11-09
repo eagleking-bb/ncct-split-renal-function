@@ -1,0 +1,28 @@
+{
+  "clinical_csv": "<DATA_ROOT>/clinical/Auto_Merged_Clinical.csv",
+  "radiomics_csv": "<DATA_ROOT>/radiomics/Official_All_Patients_Raw_Radiomics.csv",
+  "center_column": "Center",
+  "external_center": "Center_3",
+  "image_dirs": {
+    "Center_3": {
+      "ct": "<DATA_ROOT>/center3/ct",
+      "mask": "<DATA_ROOT>/center3/mask"
+    }
+  },
+  "output_dir": "<OUTPUT_ROOT>/external_center3_eval",
+  "case_list": null,
+  "radiomics_normalisation": "pooled_train",
+  "external_center_radiomics_stats": null,
+  "deep_models": {
+    "vision_only": {"checkpoint": "<RUN_ROOT>/vision_only/best_mtl_decoupled_vision_only_seed66_srf15_ccc_anchor.pth", "subdir": "vision_only"},
+    "concat_clin_only": {"checkpoint": "<RUN_ROOT>/concat_clin_only/best_mtl_decoupled_concat_clin_only_seed66_srf15_ccc_anchor.pth", "subdir": "concat_clin_only"},
+    "concat_rad_only": {"checkpoint": "<RUN_ROOT>/concat_rad_only/best_mtl_decoupled_concat_rad_only_seed66_srf15_ccc_anchor.pth", "subdir": "concat_rad_only"},
+    "concat_full": {"checkpoint": "<RUN_ROOT>/concat_full/best_mtl_decoupled_concat_full_seed66_srf15_ccc_anchor.pth", "subdir": "concat_full"},
+    "cross_attention": {"checkpoint": "<RUN_ROOT>/dual_attention_full/best_mtl_decoupled_dual_attention_full_seed66_srf15_ccc_anchor.pth", "subdir": "dual_attention_full"},
+    "early_concat": {"checkpoint": "<RUN_ROOT>/concat_full/best_mtl_decoupled_concat_full_seed66_srf15_ccc_anchor.pth", "subdir": "early_concat"}
+  },
+  "tabular_models": {
+    "clinical_only": {"estimator": "<RUN_ROOT>/tabular/clinical_ridge_logistic_estimator.joblib", "subdir": "clinical_ridge_logistic"},
+    "radiomics_only": {"estimator": "<RUN_ROOT>/tabular/radiomics_random_forest_estimator.joblib", "subdir": "radiomics_random_forest"}
+  }
+}

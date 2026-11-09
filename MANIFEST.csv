@@ -1,0 +1,51 @@
+order,category,file,analysis_role,manuscript_location,cohort_boundary
+1,metadata,.gitignore,"Git exclusion rules for patient data, checkpoints, local configuration and analysis outputs",Not in manuscript,Public; no patient data
+2,metadata,CODE_AVAILABILITY.md,Manuscript code and data availability statements,Code availability; Data availability,Public; no patient data
+3,metadata,LICENSE,"MIT licence for the source code (does not cover patient data, checkpoints or derived tables)",Not in manuscript,Public; no patient data
+4,metadata,README.md,"Package overview, study boundary, cohort flow and reproduction order",Whole manuscript,Public; no patient data
+5,metadata,REQUIREMENTS.txt,Pinned Python dependencies for the locked environment,Methods: software,Public; no patient data
+6,metadata,VERSION,Released version tag,Not in manuscript,Public; no patient data
+7,configuration,config/config.example.yaml,Templated analysis configuration with placeholder paths,Methods: statistical analysis,Public; no patient data
+8,configuration,config/external_inference.example.json,Template manifest for checkpoint-based external inference,Methods: external validation; Code availability,Public; placeholder paths only
+9,cohort,data/cohort_flow.csv,"Machine-readable cohort flow from 1,067 source records to 169 external patients",Figure 1; Methods: study population,Aggregate counts only
+10,segmentation,01_segmentation/01_nnunet_transfer_finetune.py,Contrast-enhanced CT checkpoint to NCCT transfer fine-tuning with a strict weight-transfer check,Methods: NCCT acquisition and kidney segmentation,Centres 1-2 development data only
+11,segmentation,01_segmentation/02_nnunet_predict_kidney_masks.py,Frozen-checkpoint kidney-mask inference for every study scan,Methods: NCCT acquisition and kidney segmentation,All partitions; frozen model only
+12,segmentation,01_segmentation/README.md,"Locked nnU-Net recipe: dataset, plans, trainer, split and environment",Methods: NCCT acquisition and kidney segmentation; Supplementary Table S4,Public; no patient data
+13,segmentation,01_segmentation/nnunet_output_checks.py,Dependency-free helpers that map GZH/GDPH directories to Center_2/Center_3 and verify frozen mask outputs,Methods: NCCT acquisition and kidney segmentation,Public; no patient data
+14,radiomics,02_radiomics/00_extract_radiomics_features.py,Paired left/right radiomics extraction from NCCT and kidney masks,Methods: radiomic features and image preprocessing,Authorised image data only
+15,radiomics,02_radiomics/02_select_network_adaptive_radiomics.py,Network-adaptive selection of the six paired feature families,Methods: radiomic features and image preprocessing; Figure 3,Centres 1-2 development data only
+16,radiomics,02_radiomics/04_plot_radiomics_screening_figures.py,Radiomics screening figure and source data,Figure 3,Development-only selection outputs
+17,training,03_training/01_train_proposed_cross_attention_full.py,Dual-branch clinical-radiomics cross-attention component of the ensemble,Methods: model development; Table 2,Centres 1-2 only
+18,training,03_training/02_train_internal_ablation_attention_clinical_only.py,Clinical-query attention ablation,Supplementary Table,Centres 1-2 only
+19,training,03_training/03_train_internal_ablation_attention_radiomics_only.py,Radiomics-query attention ablation,Supplementary Table,Centres 1-2 only
+20,training,03_training/04_train_sensitivity_unified_attention_full.py,Unified-query attention architecture sensitivity analysis,Supplementary Table,Centres 1-2 only
+21,training,03_training/05_train_architecture_baseline_early_concat_full.py,Early-concatenation component of the ensemble,Methods: model development; Table 2,Centres 1-2 only
+22,training,03_training/06_train_prior_ablation_early_concat_clinical_only.py,Early concatenation with NCCT and clinical input only,Table 2,Centres 1-2 only
+23,training,03_training/07_train_prior_ablation_early_concat_radiomics_only.py,Early concatenation with NCCT and radiomics input only,Table 2,Centres 1-2 only
+24,training,03_training/08_train_lower_bound_ct_only.py,NCCT-only lower-bound model,Table 2,Centres 1-2 only
+25,training,03_training/09_train_clinical_and_radiomics_tabular_baselines.py,Clinical-only and radiomics-only tabular comparators,Table 2,Centres 1-2 only
+26,training,03_training/common/__init__.py,"Package initialiser for the shared preprocessing, image-pipeline and checkpoint modules",Not in manuscript,Public; no patient data
+27,training,03_training/common/checkpoint.py,Checkpoint inference-state schema and validation,Methods: model development; Code availability,Public; no patient data
+28,training,03_training/common/monai_pipeline.py,Deterministic-cache plus per-epoch random augmentation pipeline shared by all deep-learning entrypoints,Methods: image preprocessing and augmentation,Public; no patient data
+29,training,03_training/common/preprocessing.py,"Single tabular preprocessing implementation: train-only median imputation then standardisation, with serialisable state and raw-GFR preservation",Methods: model development; Supplementary Methods,Development-cohort statistics only
+30,ensembling,04_ensembling/01_ensemble_locked_checkpoints.py,Equal-weight averaging of the prespecified checkpoint predictions,Methods: dual-fusion multimodal ensemble,Internal development only for checkpoint selection
+31,ensembling,04_ensembling/02_plot_internal_architecture_comparison.py,Architecture comparison tables and figures on the fixed internal validation set,Supplementary Figure; Results: architecture comparison,Internal development only
+32,ensembling,04_ensembling/03_plot_concat_main_comparison.py,Concat-ablation comparison figures with patient-level bootstrap AUC confidence intervals,Supplementary Figure/Table; Results: ablation comparison,Internal development only
+33,ensembling,04_ensembling/04_external_validation_center3.py,"External validation on the locked 169 patients: cohort filter, ensemble check, pooled CCC/MAE/RMSE/AUROC/AUPRC and 5,000-replicate patient bootstrap",Table 2B; Figure 5; Results: external validation,"Centre 3 locked n=169; no refitting, recalibration or reweighting"
+34,ensembling,04_ensembling/05_external_inference_from_checkpoints.py,Rebuilds external_predictions.csv from trained checkpoints and saved preprocessing state (no external refitting),Methods: external validation; Table 2B,Centre 3 inference only; frozen models
+35,evaluation,05_evaluation/01_inventory_and_reconcile.py,Case-level inventory and reconciliation of every analysis table,Methods: statistical analysis,Internal and external locked tables
+36,evaluation,05_evaluation/02_build_locked_prediction_table.py,Builds the case-level locked prediction table,Methods: statistical analysis,All partitions; frozen predictions
+37,evaluation,05_evaluation/03_evaluate_gfr.py,"Pooled and side-specific GFR agreement: CCC, MAE, RMSE, bias",Table 2; Figures 4-5,Internal development and external 169
+38,evaluation,05_evaluation/04_evaluate_srf15.py,"SRF<15% discrimination: AUROC, AUPRC, calibration, threshold metrics",Table 2; Figure 5,Internal development and external 169
+39,evaluation,05_evaluation/05_calibration_and_dca.py,"Calibration slope and intercept, Brier score and decision-curve analysis",Results: calibration; Figure 5,Internal development and external 169
+40,evaluation,05_evaluation/06_external_error_analysis.py,Error-versus-reference-GFR associations and error strata,Results: error analysis,External 169 only
+41,evaluation,05_evaluation/07_subgroup_analysis.py,Prespecified subgroup performance,Supplementary Table,Internal development and external 169
+42,evaluation,05_evaluation/08_generate_publication_figures.py,Publication figure and figure source-data generation,Figures 4-6,Locked prediction tables
+43,evaluation,05_evaluation/09_manuscript_consistency_check.py,"Final package audit: cohort-count guards, fixed 0.5:0.5 DFME check, figure presence, identifier privacy scan and output manifest",Not in manuscript,Locked outputs only
+44,evaluation,05_evaluation/privacy_scan.py,Configuration-derived source-identifier detection for public-facing outputs (NFH/GZH/GDPH),Not in manuscript,Public; no patient data
+45,evaluation,05_evaluation/utils.py,"Shared cohort colours, CCC implementation, logging and manifest helpers",Not in manuscript,Public; no patient data
+46,statistics,06_statistics/01_paired_bootstrap_proposed_ca_vs_early_concat_full.py,"DFME versus early concatenation, paired patient-level bootstrap",Results: model comparison,Locked internal development predictions
+47,statistics,06_statistics/02_paired_bootstrap_architecture_models_vs_concat_full.py,Architecture and modality ablations versus early concatenation,Results: model comparison,Locked internal development predictions
+48,statistics,06_statistics/03_paired_bootstrap_concat_clinical_only_vs_concat_full.py,Clinical-input ablation versus early concatenation,Results: model comparison,Locked internal development predictions
+49,statistics,06_statistics/04_paired_bootstrap_proposed_ca_vs_tabular_mlp.py,DFME versus the clinical-radiomics MLP,Results: model comparison,Locked internal development predictions
+50,statistics,06_statistics/bootstrap_common.py,Null-centred patient-level bootstrap test with add-one smoothing,Methods: statistical analysis,Public; no patient data
