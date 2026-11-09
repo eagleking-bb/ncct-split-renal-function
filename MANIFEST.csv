@@ -12,9 +12,9 @@ order,category,file,analysis_role,manuscript_location,cohort_boundary
 11,segmentation,01_segmentation/02_nnunet_predict_kidney_masks.py,Frozen-checkpoint kidney-mask inference for every study scan,Methods: NCCT acquisition and kidney segmentation,All partitions; frozen model only
 12,segmentation,01_segmentation/README.md,"Locked nnU-Net recipe: dataset, plans, trainer, split and environment",Methods: NCCT acquisition and kidney segmentation; Supplementary Table S4,Public; no patient data
 13,segmentation,01_segmentation/nnunet_output_checks.py,Dependency-free helpers that map GZH/GDPH directories to Center_2/Center_3 and verify frozen mask outputs,Methods: NCCT acquisition and kidney segmentation,Public; no patient data
-14,radiomics,02_radiomics/00_extract_radiomics_features.py,Paired left/right radiomics extraction from NCCT and kidney masks,Methods: radiomic features and image preprocessing,Authorised image data only
+14,radiomics,02_radiomics/01_extract_radiomics_features.py,Paired left/right radiomics extraction from NCCT and kidney masks,Methods: radiomic features and image preprocessing,Authorised image data only
 15,radiomics,02_radiomics/02_select_network_adaptive_radiomics.py,Network-adaptive selection of the six paired feature families,Methods: radiomic features and image preprocessing; Figure 3,Centres 1-2 development data only
-16,radiomics,02_radiomics/04_plot_radiomics_screening_figures.py,Radiomics screening figure and source data,Figure 3,Development-only selection outputs
+16,radiomics,02_radiomics/03_plot_radiomics_screening_figures.py,Radiomics screening figure and source data,Figure 3,Development-only selection outputs
 17,training,03_training/01_train_proposed_cross_attention_full.py,Dual-branch clinical-radiomics cross-attention component of the ensemble,Methods: model development; Table 2,Centres 1-2 only
 18,training,03_training/02_train_internal_ablation_attention_clinical_only.py,Clinical-query attention ablation,Supplementary Table,Centres 1-2 only
 19,training,03_training/03_train_internal_ablation_attention_radiomics_only.py,Radiomics-query attention ablation,Supplementary Table,Centres 1-2 only

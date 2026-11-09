@@ -71,9 +71,9 @@ paths given on the command line or in `config/config.yaml`.
 | --- | --- | --- |
 | 01 | `01_segmentation/01_nnunet_transfer_finetune.py` | Contrast-enhanced CT checkpoint to NCCT transfer fine-tuning |
 | 01 | `01_segmentation/02_nnunet_predict_kidney_masks.py` | Frozen-checkpoint mask inference for every study scan |
-| 02 | `02_radiomics/00_extract_radiomics_features.py` | Paired left/right radiomics from NCCT and kidney masks |
+| 02 | `02_radiomics/01_extract_radiomics_features.py` | Paired left/right radiomics from NCCT and kidney masks |
 | 02 | `02_radiomics/02_select_network_adaptive_radiomics.py` | Network-adaptive selection of six paired feature families (development data only) |
-| 02 | `02_radiomics/04_plot_radiomics_screening_figures.py` | Screening figure |
+| 02 | `02_radiomics/03_plot_radiomics_screening_figures.py` | Screening figure |
 | 03 | `03_training/common/` | Shared preprocessing (train-only imputation then scaling), deterministic-cache/runtime-augmentation image pipeline, checkpoint inference-state schema |
 | 03 | `03_training/*.py` | Nine model and ablation training entrypoints |
 | 04 | `04_ensembling/01_ensemble_locked_checkpoints.py` | Equal-weight averaging of the prespecified checkpoint predictions |
