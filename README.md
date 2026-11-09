@@ -212,15 +212,30 @@ in its own environment.
 | Deep learning | `03_training`, `04_ensembling/05` | torch 2.4.0, monai 1.3.0, nibabel, tqdm, joblib |
 | nnU-Net (separate) | `01_segmentation` | nnU-Net v2 2.5.2; installed in its own environment |
 
-This distribution contains the analysis and figure code only. The internal test
-harness used during development (synthetic fixed-value regression suites,
-including the GFR label/unit contract) and the optional DICOM-header utility are
-not redistributed; they do not affect any number in the manuscript. The GFR unit
-contract they enforce is stated here: raw GFR is preserved in
-`left_gfr_original` / `right_gfr_original`, SRF labels are computed from those
-raw values, the model target is standardised once with training statistics,
-inverse transformation restores mL/min/1.73 m², and tabular external predictions
-remain in original units.
+### Tests
+
+`tests/` holds the data-free regression suite; it needs no patient data, no GPU
+and no network access:
+
+```bash
+pip install pytest
+pytest -q
+```
+
+| Test | Contract it protects |
+| --- | --- |
+| `tests/test_gfr_units.py` | Raw GFR is preserved in `left_gfr_original` / `right_gfr_original`; SRF labels are derived from those raw values; the model target is standardised exactly once; inverse transformation restores mL/min/1.73 m²; tabular external predictions stay in original units |
+| `tests/test_preprocessing.py` | Median imputation precedes standardisation, and the fitted state round-trips |
+| `tests/test_bootstrap_p.py` | Null-centred patient-level bootstrap with add-one smoothing |
+| `tests/test_ccc_consistency.py` | The four Lin's CCC implementations agree, including the bounded effect of the ddof convention |
+| `tests/test_distribution_contract.py` | Every `MANIFEST.csv` path exists, the manifest covers every shipped file, and the locked cohort counts are unchanged |
+
+Tests that need PyTorch and MONAI are skipped automatically when those packages
+are absent, so the suite runs on a laptop. `.github/workflows/tests.yml` runs the
+same suite on Python 3.9 and 3.11 for every push and pull request.
+
+The optional DICOM-header metadata utility used during data collection is not
+distributed; it contributes to no reported number.
 
 ## What this repository deliberately does not do
 

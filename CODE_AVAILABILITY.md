@@ -36,7 +36,8 @@ the precision printed in the manuscript.
 | External validation, GFR and SRF<15% evaluation | Individual reference GFR values |
 | Calibration, decision-curve, error and subgroup analyses | Locked prediction tables (available on request) |
 | Paired bootstrap comparisons | Publication figure artwork |
-| Final package consistency audit (`05_evaluation/09`) | Internal development test harness |
+| Final package consistency audit (`05_evaluation/09`) | Patient images and clinical records |
+| Data-free unit and contract tests (`tests/`, CI) | Model checkpoints |
 | Publication figure code and figure source data | |
 
 ## Rebuilding external predictions
@@ -60,11 +61,11 @@ cannot be distinguished from the corrected procedure.
 
 ## Scope of this distribution
 
-This is the minimal analysis package prepared for submission. It contains every
-script that produces the cohort flow, the model results, the statistics and the
-publication figures. The internal development test harness (synthetic
-fixed-value regression suites) and the optional DICOM-header metadata utility are
-not distributed; neither contributes to any reported number.
+This is the analysis package prepared for submission. It contains every script
+that produces the cohort flow, the model results, the statistics and the
+publication figures, together with a data-free regression suite (`tests/`) that
+CI runs on every push. The optional DICOM-header metadata utility used during
+data collection is not distributed; it contributes to no reported number.
 
 ## Requirements for a full re-run
 

@@ -49,3 +49,10 @@ order,category,file,analysis_role,manuscript_location,cohort_boundary
 48,statistics,06_statistics/03_paired_bootstrap_concat_clinical_only_vs_concat_full.py,Clinical-input ablation versus early concatenation,Results: model comparison,Locked internal development predictions
 49,statistics,06_statistics/04_paired_bootstrap_proposed_ca_vs_tabular_mlp.py,DFME versus the clinical-radiomics MLP,Results: model comparison,Locked internal development predictions
 50,statistics,06_statistics/bootstrap_common.py,Null-centred patient-level bootstrap test with add-one smoothing,Methods: statistical analysis,Public; no patient data
+51,ci,.github/workflows/tests.yml,GitHub Actions workflow running the CPU test suite on Python 3.9 and 3.11,Not in manuscript,Synthetic data only
+52,tests,tests/conftest.py,Makes the repository layout importable for the test suite,Not in manuscript,Synthetic data only
+53,tests,tests/test_ccc_consistency.py,"Pins the mutual agreement of the four Lin's CCC implementations, including the bounded ddof difference",Not in manuscript,Synthetic data only
+54,tests,tests/test_distribution_contract.py,Enforces the MANIFEST path and ordering contract and the locked cohort counts,Figure 1; Methods: study population (counts),Aggregate data only
+55,tests,tests/test_gfr_units.py,"Fixed-value regression tests for the GFR contract: raw GFR preserved, SRF derived from raw GFR, target standardised once, inverse transform restores mL/min/1.73 m2, tabular external predictions in original units",Methods: model development; Code availability,Synthetic data only
+56,tests,tests/test_preprocessing.py,Preprocessing order (median imputation before standardisation) and serialisable state,Methods: model development,Synthetic data only
+57,tests,tests/test_bootstrap_p.py,Null-centred patient-level bootstrap test with add-one smoothing,Methods: statistical analysis,Synthetic data only

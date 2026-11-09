@@ -1,5 +1,6 @@
 # Byte-compiled / cached files
 __pycache__/
+.pytest_cache/
 *.py[cod]
 .ipynb_checkpoints/
 
