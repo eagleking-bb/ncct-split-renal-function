@@ -6,20 +6,18 @@
 kidney segmentation, radiomics extraction, model training, ensembling and
 statistical evaluation is publicly available at
 `https://github.com/eagleking-bb/ncct-split-renal-function` and archived at Zenodo
-(DOI: 10.5281/zenodo.24080203). Supplied with the locked prediction tables, the
+(concept DOI: 10.5281/zenodo.24080202, which resolves to the latest version;
+this release is 10.5281/zenodo.24134511). Supplied with the locked prediction tables, the
 released evaluation and statistics stages regenerate every reported value at the
 precision printed in the manuscript.
 
 **Data availability.** The datasets generated and/or analysed during the
 current study are not publicly available because they contain clinical images
-and linked clinical records that carry a residual re-identification risk. The
-study protocol, the statistical analysis plan and the data dictionary are
-available with the publication. De-identified individual participant data
-and the data dictionary are available from the corresponding author
-(qwei@smu.edu.cn) on reasonable request for non-commercial research, after
-approval of a study proposal and signature of a data-use agreement, from 12
-months to 5 years after publication. The study protocol and the statistical
-analysis plan are available from the corresponding author on the same terms.
+and linked clinical records that carry a residual re-identification risk.
+De-identified individual participant data and the data dictionary are available
+from the corresponding author (qwei@smu.edu.cn) on reasonable request for
+non-commercial research, after approval of a study proposal and a signed
+data-use agreement, from 12 months to 5 years after publication.
 
 ## What is in this repository
 

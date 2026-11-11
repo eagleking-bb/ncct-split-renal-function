@@ -5,8 +5,9 @@ from non-contrast CT using multimodal artificial intelligence: a three-center
 retrospective study* (submitted to eClinicalMedicine).
 
 Release `1.2.1`. Documentation and provenance-metadata revision: no analysis
-behaviour changed and no reported value changed. The archived `1.2.0` snapshot at
-doi:10.5281/zenodo.24080203 is the version reviewed with the manuscript. Source:
+behaviour changed and no reported value changed. Archived at Zenodo under the
+concept DOI 10.5281/zenodo.24080202, which always resolves to the latest version;
+this release is 10.5281/zenodo.24134511. Source:
 https://github.com/eagleking-bb/ncct-split-renal-function.
 
 ## Reproducibility
