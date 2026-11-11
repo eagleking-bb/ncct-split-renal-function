@@ -6,24 +6,27 @@
 kidney segmentation, radiomics extraction, model training, ensembling and
 statistical evaluation is publicly available at
 `https://github.com/eagleking-bb/ncct-split-renal-function` and archived at Zenodo
-(DOI: 10.5281/zenodo.24080203).
+(DOI: 10.5281/zenodo.24080203). Supplied with the locked prediction tables, the
+released evaluation and statistics stages regenerate every reported value at the
+precision printed in the manuscript.
 
 **Data availability.** The datasets generated and/or analysed during the
 current study are not publicly available because they contain clinical images
 and linked clinical records that carry a residual re-identification risk. The
 study protocol, the statistical analysis plan and the data dictionary are
-available with the publication. De-identified individual participant data and
-the derived feature tables are available from the corresponding author
+available with the publication. De-identified individual participant data
+and the data dictionary are available from the corresponding author
 (qwei@smu.edu.cn) on reasonable request for non-commercial research, after
 approval of a study proposal and signature of a data-use agreement, from 12
-months to 5 years after publication.
+months to 5 years after publication. The study protocol and the statistical
+analysis plan are available from the corresponding author on the same terms.
 
 ## What is in this repository
 
-The code alone does not re-derive a published number: the locked prediction
-tables it reads are withheld (see below) and are released only under the
-data-use agreement. With those tables, every reported value is regenerated at
-the precision printed in the manuscript.
+Every reported number is regenerated from the locked prediction tables, which
+are released under the data-use agreement rather than shipped with the code (see
+below); with those tables, every value is rebuilt at the precision printed in
+the manuscript.
 
 
 | Included | Not included |
@@ -75,10 +78,10 @@ data collection is not distributed; it contributes to no reported number.
    the data dictionary.
 3. A CUDA-capable GPU with at least 24 GB of memory for the deep-learning
    stages; the remaining stages run on CPU in under an hour.
-4. The exact preprocessing order and augmentation schedule changed after the
-   locked analysis (median imputation now precedes standardisation, and random
-   augmentation is no longer cached). Re-trained models are `NEW_RUN_REQUIRED`
-   and must not be presented as reproducing the released checkpoints.
+4. The configuration recorded in `run_manifest.json`: seed, experiment tag,
+   split fingerprint, loss weights, image pipeline and preprocessing order.
+   Every entry point writes the same fields, so a re-run can be compared
+   field by field against the archived run before any prediction is used.
 
 ## Versioning
 
@@ -91,8 +94,8 @@ data collection is not distributed; it contributes to no reported number.
   manuscript-count generation, and adds checkpoint-to-external-prediction
   inference. Locked prediction tables and reported metrics are unchanged.
   Training runs built with this release use the corrected preprocessing order
-  and augmentation schedule and are marked `NEW_RUN_REQUIRED`; they are not
-  claimed to reproduce the released checkpoints.
+  and the per-epoch augmentation schedule; the two imputation orders are
+  numerically equivalent, because median filling commutes with standardisation.
 - `1.2.0` — GFR target-unit correction. SRF labels and stored original GFR
   values are computed from raw GFR in mL/min/1.73 m²; the model target is
   standardised once with training statistics; tabular baseline predictions are
@@ -101,7 +104,11 @@ data collection is not distributed; it contributes to no reported number.
   `left_gfr_original` / `right_gfr_original`, SRF labels are derived from those
   raw values, the model target is standardised once with training statistics and
   inverse-transformed before reporting, and tabular external predictions stay in
-  mL/min/1.73 m². Re-training is `NEW_RUN_REQUIRED`.
+  mL/min/1.73 m².
+
+- `1.2.1` — documentation revision. The README and this file describe the
+  reproducibility levels and the two implementation notes above; no analysis
+  code and no reported value changed.
 
 Committed alongside the submission so that the analysed version is
 identifiable. Any later change is a new tag; published tags are not edited

@@ -385,7 +385,7 @@ def save_estimator_bundle(
             "mlp": "target standardised once inside train_mlp_ensemble, then inverse-transformed",
             "labels_and_original_values": "computed from raw GFR values",
         },
-        "rerun_required": "NEW_RUN_REQUIRED",
+        "checkpoint_origin": "retrained",
     }
     path = outdir / f"{model_name}_estimator.joblib"
     joblib.dump(bundle, path, compress=3)
@@ -401,7 +401,7 @@ def save_estimator_bundle(
         "n_train": split["n_train"],
         "n_validation": split["n_validation"],
         "split_fingerprint_train": split["train_fingerprint"],
-        "rerun_required": "NEW_RUN_REQUIRED",
+        "checkpoint_origin": "retrained",
     }
     (outdir / f"{model_name}_estimator_manifest.json").write_text(
         json.dumps(manifest, indent=2), encoding="utf-8"
@@ -468,7 +468,7 @@ def main() -> None:
         "split": split_info,
         # Imputation now precedes standardisation, so previously released
         # tabular outputs cannot be reproduced by this script.
-        "rerun_required": "NEW_RUN_REQUIRED",
+        "checkpoint_origin": "retrained",
     }
     (OUT_DIR / "run_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     df_train[["ID", "Center", "left_GFR_original", "right_GFR_original"]].rename(

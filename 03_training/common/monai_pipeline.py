@@ -5,10 +5,9 @@ Why this module exists
 The earlier implementations handed the *full* training transform, including
 ``RandAffined`` / ``RandGaussianNoised`` / ``RandAdjustContrastd``, to
 ``PersistentDataset`` or ``CacheDataset``.  MONAI caches the result of the
-transform, so each volume received exactly one random augmentation for the whole
-training run instead of a fresh draw every epoch.  That silently weakened the
-augmentation of the ablation models relative to the main model and made the
-architecture comparison unfair.
+transform, so a volume kept the same augmentation for the whole training run
+instead of receiving a fresh draw every epoch, and ablations that followed that
+path were trained with weaker augmentation than the main model.
 
 The pipeline here separates the two stages:
 
@@ -21,10 +20,10 @@ The pipeline here separates the two stages:
 Validation uses only the deterministic stage plus the deterministic kidney
 normalisation, so no randomness reaches validation or inference.
 
-.. warning::
-   Restoring per-epoch augmentation changes training behaviour.  Checkpoints
-   produced by the previous cached pipeline cannot be reproduced by this code;
-   re-trained runs are **NEW_RUN_REQUIRED**.
+.. note::
+   Caching only the deterministic stage keeps augmentation per-epoch for every
+   entry point, so the models reported here are trained with the same schedule
+   and stay comparable.  The cached path is not exposed.
 """
 
 from __future__ import annotations

@@ -52,6 +52,35 @@ def test_nan_input_is_imputed_before_scaling():
     assert pre.state()["preprocessing_order"] == PREPROCESSING_ORDER
 
 
+def test_impute_then_scale_equals_scale_then_impute():
+    """The imputation order does not move a fitted value.
+
+    Median filling commutes with an affine transform whose statistics are
+    estimated from the observed entries, so scaling first and imputing
+    afterwards (the earlier implementation) lands on the same feature values as
+    imputing first.  This pins the claim in the README.
+    """
+    frame = synthetic_frame()
+    pre = TabularPreprocessor(CLIN, RAD).fit(frame.iloc[:32])
+    current = pre.transform(frame)
+
+    stats = pre.state()["clinical"]
+    legacy = frame.copy()
+    for feature in CLIN:
+        mean, scale = stats[feature]["mean"], stats[feature]["scale"]
+        values = frame[feature].to_numpy(dtype=float)
+        scaled = (values - mean) / scale  # missing entries stay missing
+        fill = (stats[feature]["median"] - mean) / scale
+        legacy[feature] = np.where(np.isfinite(scaled), scaled, fill)
+
+    np.testing.assert_allclose(
+        current[CLIN].to_numpy(dtype=float),
+        legacy[CLIN].to_numpy(dtype=float),
+        rtol=0,
+        atol=1e-12,
+    )
+
+
 def test_validation_statistics_do_not_leak():
     frame = synthetic_frame()
     train = frame.iloc[:32]

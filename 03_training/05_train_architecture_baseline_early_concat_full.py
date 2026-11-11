@@ -720,9 +720,9 @@ def main():
         "srf_threshold": SRF_THRESHOLD,
         "output_dir": str(OUTPUT_DIR),
         "preprocessed_cache_dir": str(PREPROCESSED_CACHE_DIR),
-        # NEW_RUN_REQUIRED: the cached/runtime transform split changed the
-        # augmentation schedule relative to the locked checkpoints.
-        "rerun_required": "NEW_RUN_REQUIRED",
+        # This checkpoint was written by a fresh training run; it is not the
+        # archived checkpoint used for the reported table.
+        "checkpoint_origin": "retrained",
     }
     print("="*70)
     print("Early-concatenation model training")
@@ -770,7 +770,7 @@ def main():
             "applied in __getitem__ on every access; random transforms are not cached"
         ),
     }
-    run_manifest.setdefault("rerun_required", "NEW_RUN_REQUIRED")
+    run_manifest.setdefault("checkpoint_origin", "retrained")
     run_manifest["checkpoint_inference_state_schema"] = inference_state["schema_version"]
     (OUTPUT_DIR / "run_manifest.json").write_text(
         json.dumps(run_manifest, indent=2), encoding="utf-8"

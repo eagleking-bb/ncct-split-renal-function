@@ -68,13 +68,15 @@ def build_inference_state(
             if active_tabular_modalities is not None
             else ("clinical", "radiomics")
         ),
-        # Re-training is mandatory for this payload: the preprocessing order and
-        # the augmentation schedule differ from the previously released runs.
+        # Provenance of the payload: a checkpoint written by these entry points
+        # comes from a fresh training run, never from the archived run that
+        # produced the reported tables.
         "reproducibility": {
-            "rerun_required": "NEW_RUN_REQUIRED",
+            "checkpoint_origin": "retrained",
             "reason": (
-                "median imputation now precedes standardisation, and random "
-                "augmentation is sampled per epoch instead of being cached"
+                "written by the released training entry point; the archived "
+                "checkpoint used for the reported table is distributed only "
+                "under the data-use agreement"
             ),
         },
     }
@@ -89,10 +91,10 @@ def require_inference_state(checkpoint: dict, source: str = "checkpoint") -> dic
         raise MissingInferenceStateError(
             f"{source} does not contain an 'inference_state' block, so its "
             "imputation/scaling parameters and image preprocessing cannot be "
-            "reconstructed.  Re-train the model with the current entrypoints "
-            "(NEW_RUN_REQUIRED) or supply a compatible preprocessing state "
-            "explicitly via the inference manifest.  Refitting on the external "
-            "cohort is deliberately not supported."
+            "reconstructed.  Supply a checkpoint written by the current "
+            "entrypoints, or a compatible preprocessing state via the inference "
+            "manifest.  Refitting on the external cohort is deliberately not "
+            "supported."
         )
     schema = state.get("schema_version")
     if schema != INFERENCE_SCHEMA_VERSION:

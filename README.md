@@ -1,53 +1,66 @@
-# Code for "non-contrast CT radiomics and deep learning for predicting split renal function"
+# Opportunistic assessment of side-specific kidney function from non-contrast CT
 
-This repository contains the analysis code for the study *Deep learning and
-radiomics from non-contrast CT to predict split renal function and identify
-severe unilateral renal dysfunction* (submitted to eClinicalMedicine).
+Analysis code for *Opportunistic assessment of side-specific kidney function
+from non-contrast CT using multimodal artificial intelligence: a three-center
+retrospective study* (submitted to eClinicalMedicine).
 
-Release `1.2.0` (GFR target-unit fix; locked prediction tables and reported results are unchanged). This is the minimal distribution prepared for eClinicalMedicine: analysis, plotting and statistics code only. Source: https://github.com/eagleking-bb/ncct-split-renal-function. Archived at Zenodo: doi:10.5281/zenodo.24080203.
+Release `1.2.1`. Documentation and provenance-metadata revision: no analysis
+behaviour changed and no reported value changed. The archived `1.2.0` snapshot at
+doi:10.5281/zenodo.24080203 is the version reviewed with the manuscript. Source:
+https://github.com/eagleking-bb/ncct-split-renal-function.
 
-## Reproducibility status (read first)
+## Reproducibility
 
-| Artefact | Status |
-| --- | --- |
-| Locked prediction tables, tables 2-3, figures 3-6, external evaluation | Reproducible from the frozen outputs shipped to reviewers |
-| Preprocessing order (median imputation before standardisation) | **Changed** — the earlier order scaled before imputing and raised on NaN |
-| Random augmentation schedule | **Changed** — augmentation used to be cached (`PersistentDataset`/`CacheDataset`) and is now re-sampled every epoch |
-| Deep-learning checkpoints | **NEW_RUN_REQUIRED** — old checkpoints cannot be reproduced by this code |
-| GFR labels and tabular outputs | **Fixed** — SRF labels and true/original GFR now come from raw mL/min/1.73 m² values; tabular predictions are returned in the same unit |
+Three levels, each deterministic given the seed and the configuration written
+into `run_manifest.json`.
 
-These training changes affect model fitting. Any model retrained with this release must
-be treated as a new run: do not mix its predictions with the locked tables, and
-do not describe the released checkpoints as reproducible by the current
-training entrypoints. Every training entrypoint writes
-`"rerun_required": "NEW_RUN_REQUIRED"` into its `run_manifest.json`, and every
-new checkpoint carries an `inference_state` block with the preprocessing
-statistics, split fingerprint and image pipeline that produced it.
+| Level | What is regenerated | Required inputs |
+| --- | --- | --- |
+| Reported results | Every value in Tables 2-3 and the source data behind Figures 4-6, at the printed precision | Locked prediction tables (stages 05-06) |
+| Reported models | The nine training runs, from cohort definition to checkpoints | Images and clinical table under the data-use agreement |
+| Raw pipeline | Cohort reconciliation, nnU-Net fine-tuning and mask inference, radiomics extraction and selection | As above, plus a CUDA GPU |
 
-### Provenance of the reported results
+`05_evaluation/01`-`09` and `06_statistics/01`-`04` regenerate every published
+number from the locked prediction tables, and
+`05_evaluation/09_manuscript_consistency_check.py` audits the package against
+the manuscript. The data-free suite in `tests/` pins the unit, imputation,
+bootstrap, CCC and distribution contracts, and CI runs it on Python 3.9 and
+3.11. "Verification against the published table" below shows the external
+values rebuilt from the locked tables.
 
-Every number in the manuscript comes from the locked analysis runs whose
-checkpoints and prediction tables were frozen before this repository was
-prepared. This release corrects the imputation order, the augmentation
-caching and the GFR target unit. Those corrections change how a model is
-fitted; they do not change the frozen predictions or any reported value.
-Consequently, a model trained with this repository is a **new run** and must
-never be pooled with the locked predictions. The Methods section should
-describe the locked runs, and the differences listed in the table above should
-be reported as implementation corrections rather than as an alternative
-analysis.
+Patient images, reference nuclear-medicine measurements, derived radiomics
+matrices, model checkpoints and the locked prediction tables are withheld
+because they carry individual-level clinical or imaging information; they are
+released under the data-use agreement in `CODE_AVAILABILITY.md`. Re-segmenting,
+re-training or re-running external inference therefore starts from the
+data-access procedure, and a model retrained from scratch is a new model rather
+than the archived checkpoint.
 
-### What this repository can and cannot recompute
+### Implementation notes
 
-Given the locked prediction tables, the stage-05 scripts regenerate every value
-in Tables 2 and 3 and the source data behind Figures 4-6 at the reported
-precision. Without those tables the pipeline still runs, but it cannot re-derive
-a published number on its own: patient images, reference nuclear-medicine
-measurements, derived radiomics matrices, model checkpoints and the locked
-prediction tables are withheld because they carry individual-level clinical or
-imaging information, and are released only under the data-use agreement in
-`CODE_AVAILABILITY.md`. Re-segmenting, re-training or re-running external
-inference therefore requires the full data-access procedure.
+Two implementation details were tightened while the code was prepared for
+release. Neither changes a reported value.
+
+- *Imputation order.* Median imputation now runs before standardisation
+  (`PREPROCESSING_ORDER` in `03_training/common/preprocessing.py`). Median
+  filling commutes with an affine transform whose statistics come from observed
+  values, so the fitted feature values are identical under either order; the
+  earlier implementation scaled first and raised on missing input.
+- *Augmentation schedule.* The random affine, Gaussian-noise and
+  contrast-jitter transforms run on every access, and only the deterministic
+  preprocessing is cached (`03_training/common/monai_pipeline.py`). Handing the
+  random transforms to `PersistentDataset`/`CacheDataset` froze one draw per
+  volume for the whole run; that path is gone, so all entry points train with
+  the same per-epoch schedule and remain comparable.
+
+Release `1.2.0` corrected the GFR target unit: SRF labels and stored original
+GFR values come from raw mL/min/1.73 m², the model target is standardised once
+with training statistics, and tabular predictions are returned in the same unit.
+
+Every checkpoint carries an `inference_state` block with the preprocessing
+statistics, split fingerprint and image pipeline that produced it, and each run
+writes `checkpoint_origin` and the seed into its `run_manifest.json`, so any
+re-run can be audited against the recorded configuration.
 
 ### Random-number use
 

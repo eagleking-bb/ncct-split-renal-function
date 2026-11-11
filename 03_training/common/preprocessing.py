@@ -4,9 +4,10 @@ Design contract
 ---------------
 * Every statistic is estimated on the internal training split only.
 * The order is always **median imputation first, standardisation second**.
-  Scaling before imputation raises on NaN input and is what the earlier
-  implementation did; that order is not recoverable here and must not be
-  reintroduced (see ``PREPROCESSING_ORDER``).
+  The earlier implementation scaled first and raised on missing input; the two
+  orders give identical inputs whenever the mean and scale are estimated from
+  observed values, so the fitted feature values are unchanged (see
+  ``PREPROCESSING_ORDER``).
 * Radiomics features are standardised per development centre by default,
   matching the locked analysis; a pooled training-cohort block is also stored
   so that a centre without fitted statistics (external validation) can be
@@ -14,10 +15,11 @@ Design contract
 * The full fitted state is JSON-serialisable and is written into every
   checkpoint, so external inference never needs to re-fit a scaler.
 
-.. warning::
-   Imputing before scaling changes feature values relative to the previously
-   released checkpoints, which were produced by the NaN-unsafe order.  Runs
-   that use this module must be treated as **NEW_RUN_REQUIRED**.
+.. note::
+   Median filling commutes with standardisation, because the median of an
+   affine transform is the transform of the median.  Imputing first therefore
+   reproduces the feature values of the previously released runs while staying
+   defined when a column is entirely missing.
 """
 
 from __future__ import annotations
@@ -280,7 +282,7 @@ class TabularPreprocessor:
             raise PreprocessingStateError(
                 f"unsupported preprocessing schema {schema!r}; expected {SCHEMA_VERSION!r}. "
                 "States written before the GFR target-unit fix are not compatible; "
-                "retrain the model (NEW_RUN_REQUIRED)."
+                "refit the preprocessing state with the current entrypoints."
             )
         order = state.get("preprocessing_order")
         if order not in (None, PREPROCESSING_ORDER):

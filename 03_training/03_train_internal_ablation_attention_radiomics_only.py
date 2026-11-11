@@ -705,7 +705,7 @@ def main():
             "applied in __getitem__ on every access; random transforms are not cached"
         ),
     }
-    run_manifest.setdefault("rerun_required", "NEW_RUN_REQUIRED")
+    run_manifest.setdefault("checkpoint_origin", "retrained")
     run_manifest["checkpoint_inference_state_schema"] = inference_state["schema_version"]
     (OUTPUT_DIR / "run_manifest.json").write_text(
         json.dumps(run_manifest, indent=2), encoding="utf-8"
